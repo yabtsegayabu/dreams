@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dream Furniture — Concept Preview · Handmade in Addis Ababa</title>
+<meta name="description" content="A concept preview for Dream Furniture — handmade furniture in Addis Ababa. Rated 5.0 from 10 Google reviews." />
+<meta name="theme-color" content="#F3EDE4" />
+<meta property="og:title" content="Dream Furniture — Concept Preview" />
+<meta property="og:description" content="A cinematic concept website for Dream Furniture, Addis Ababa." />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231A1613'/><text x='50' y='70' font-family='Georgia,serif' font-size='58' fill='%23C08A3E' text-anchor='middle'>D</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/split-type"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+<style>
+/* =========================================================
+   TOKENS
+   ========================================================= */
+:root{
+  --bone:#F3EDE4;
+  --paper:#FBF7F1;
+  --sand:#E3D8C7;
+  --ink:#1A1613;
+  --ink-soft:#5C5147;
+  --clay:#A9572F;
+  --clay-deep:#8A4526;
+  --gold:#C08A3E;
+  --line:rgba(26,22,19,.16);
+  --line-soft:rgba(26,22,19,.09);
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-io:cubic-bezier(.76,0,.24,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:auto; /* Lenis handles it */
+}
+
+body{
+  margin:0;
+  background:var(--bone);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:300;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+body.loading{overflow:hidden;}
+body.locked{overflow:hidden;}
+body.no-cursor{cursor:none;}
+
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;}
+h1,h2,h3,h4,p,figure,blockquote{margin:0;}
+
+::selection{background:var(--clay);color:var(--bone);}
+
+:focus-visible{outline:2px solid var(--clay);outline-offset:3px;border-radius:1px;}
+
+section[id]{scroll-margin-top:80px;}
+
+/* =========================================================
+   GRAIN OVERLAY
+   ========================================================= */
+.grain{
+  position:fixed;inset:0;z-index:9000;pointer-events:none;
+  opacity:.055;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* =========================================================
+   PRELOADER
+   ========================================================= */
+.preloader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--bone);
+  overflow:hidden;
+}
+.preloader-inner{
+  display:flex;flex-direction:column;align-items:center;gap:24px;
+  text-align:center;
+}
+.preloader-logo{
+  font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:300;letter-spacing:.08em;
+  display:flex;overflow:hidden;
+}
+.preloader-logo span{
+  display:inline-block;
+  transform:translateY(110%);
+}
+.preloader-tag{
+  font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(243,237,228,.5);
+  opacity:0;
+}
+.preloader-count{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(3rem,7vw,5.5rem);font-weight:300;
+  line-height:1;color:var(--gold);letter-spacing:-.02em;
+  display:flex;align-items:baseline;gap:.1em;
+}
+.preloader-count small{
+  font-size:.35em;letter-spacing:.1em;color:rgba(243,237,228,.5);
+  font-style:normal;
+}
+.preloader-bar{
+  width:180px;height:1px;background:rgba(243,237,228,.14);
+  overflow:hidden;
+}
+.preloader-bar span{
+  display:block;height:100%;width:0;
+  background:var(--gold);
+}
+.preloader-curtain{
+  position:fixed;inset:0;z-index:9998;background:var(--bone);
+  transform:translateY(100%);
+}
+
+/* =========================================================
+   CUSTOM CURSOR
+   ========================================================= */
+.cursor,
+.cursor-dot{
+  position:fixed;top:0;left:0;z-index:9500;
+  pointer-events:none;border-radius:50%;
+  transform:translate(-50%,-50%);
+  will-change:transform;
+}
+.cursor{
+  width:36px;height:36px;
+  border:1px solid rgba(26,22,19,.5);
+  transition:width .4s var(--ease),height .4s var(--ease),
+             background .4s var(--ease),border-color .4s var(--ease),
+             opacity .4s var(--ease);
+  mix-blend-mode:difference;
+  border-color:rgba(243,237,228,.9);
+}
+.cursor-dot{
+  width:5px;height:5px;background:var(--ink);
+  mix-blend-mode:difference;
+  background:var(--bone);
+}
+.cursor.hover{
+  width:72px;height:72px;
+  background:rgba(243,237,228,.12);
+  border-color:rgba(243,237,228,.9);
+}
+.cursor.click{
+  width:20px;height:20px;
+}
+.cursor.hide,
+.cursor-dot.hide{opacity:0;}
+@media (pointer:coarse){
+  .cursor,.cursor-dot{display:none;}
+  body.no-cursor{cursor:auto;}
+}
+
+/* =========================================================
+   SCROLL PROGRESS
+   ========================================================= */
+.progress{
+  position:fixed;top:0;left:0;height:2px;width:100%;
+  z-index:8500;pointer-events:none;
+  transform-origin:left center;
+  transform:scaleX(0);
+  background:var(--clay);
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  padding:22px 0;
+  transition:padding .45s var(--ease),background .45s var(--ease),
+             border-color .45s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  padding:13px 0;
+  background:rgba(243,237,228,.86);
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
+  border-bottom-color:var(--line-soft);
+}
+.nav-inner{
+  max-width:1320px;margin:0 auto;
+  padding:0 clamp(20px,5vw,64px);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.brand{display:flex;flex-direction:column;gap:5px;line-height:1;}
+.brand-mark{
+  font-family:var(--serif);font-size:1.4rem;font-weight:500;
+  letter-spacing:-.01em;
+}
+.brand-sub{
+  font-size:.53rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--ink-soft);padding-left:.1em;
+}
+.nav-links{display:flex;gap:clamp(18px,2.4vw,34px);}
+.nav-links a{
+  position:relative;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-soft);padding-bottom:4px;transition:color .3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--clay);transform:scaleX(0);transform-origin:right;
+  transition:transform .5s var(--ease);
+}
+.nav-links a:hover{color:var(--ink);}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left;}
+.nav-cta{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:11px 20px;border:1px solid var(--line);border-radius:2px;
+  font-size:.7rem;letter-spacing:.1em;font-weight:500;white-space:nowrap;
+  transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
+}
+.nav-cta:hover{background:var(--ink);border-color:var(--ink);color:var(--bone);}
+.nav-toggle{
+  display:none;width:34px;height:34px;position:relative;z-index:85;
+}
+.nav-toggle span{
+  position:absolute;left:6px;right:6px;height:1.5px;background:var(--ink);
+  transition:transform .4s var(--ease),opacity .3s;
+}
+.nav-toggle span:nth-child(1){top:13px;}
+.nav-toggle span:nth-child(2){top:20px;}
+.nav-toggle.open span:nth-child(1){transform:translateY(3.5px) rotate(45deg);}
+.nav-toggle.open span:nth-child(2){transform:translateY(-3.5px) rotate(-45deg);}
+
+/* Mobile menu */
+.mobile-menu{
+  position:fixed;inset:0;z-index:75;background:var(--bone);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:96px clamp(24px,8vw,56px) 48px;
+  transform:translateY(-100%);
+  transition:transform .65s var(--ease-io);
+  visibility:hidden;
+}
+.mobile-menu.open{transform:translateY(0);visibility:visible;}
+.mobile-menu a.mm-link{
+  font-family:var(--serif);font-size:clamp(28px,7vw,42px);
+  padding:14px 0;border-bottom:1px solid var(--line-soft);
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-weight:300;letter-spacing:-.01em;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
+}
+.mobile-menu.open a.mm-link{opacity:1;transform:translateY(0);}
+.mobile-menu.open a.mm-link:nth-child(1){transition-delay:.15s;}
+.mobile-menu.open a.mm-link:nth-child(2){transition-delay:.22s;}
+.mobile-menu.open a.mm-link:nth-child(3){transition-delay:.29s;}
+.mobile-menu.open a.mm-link:nth-child(4){transition-delay:.36s;}
+.mobile-menu.open a.mm-link:nth-child(5){transition-delay:.43s;}
+.mobile-menu a.mm-link span{
+  font-size:.62rem;letter-spacing:.24em;color:var(--clay);
+  font-family:var(--sans);
+}
+.mm-foot{
+  margin-top:34px;display:flex;flex-direction:column;gap:10px;
+  font-size:.85rem;color:var(--ink-soft);
+  opacity:0;transition:opacity .6s var(--ease) .5s;
+}
+.mobile-menu.open .mm-foot{opacity:1;}
+.mm-foot a{color:var(--ink);border-bottom:1px solid var(--line);display:inline-block;}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  padding:16px 28px;border:1px solid transparent;border-radius:2px;
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  transition:background .4s var(--ease),color .4s var(--ease),
+             border-color .4s var(--ease),transform .3s var(--ease);
+  position:relative;overflow:hidden;
+  will-change:transform;
+}
+.btn svg{flex-shrink:0;transition:transform .4s var(--ease);}
+.btn:hover svg{transform:translateX(3px);}
+.btn-solid{background:var(--ink);color:var(--bone);}
+.btn-solid::before{
+  content:'';position:absolute;inset:0;background:var(--clay);
+  transform:scaleX(0);transform-origin:right;
+  transition:transform .6s var(--ease-io);z-index:0;
+}
+.btn-solid:hover::before{transform:scaleX(1);transform-origin:left;}
+.btn-solid span,
+.btn-solid svg{position:relative;z-index:1;}
+.btn-ghost{border-color:var(--line);color:var(--ink);}
+.btn-ghost:hover{background:var(--ink);border-color:var(--ink);color:var(--bone);}
+
+/* =========================================================
+   SHARED
+   ========================================================= */
+.container{max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px);}
+.section{padding:clamp(72px,10vw,140px) 0;position:relative;}
+
+.label{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:.62rem;letter-spacing:.36em;text-transform:uppercase;
+  color:var(--clay);font-weight:500;margin-bottom:22px;
+}
+.label::before{content:'';width:26px;height:1px;background:currentColor;opacity:.55;}
+
+h2{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(32px,4.8vw,64px);
+  line-height:1.02;
+  letter-spacing:-.022em;
+}
+h2 em{font-style:italic;color:var(--clay);font-weight:300;}
+
+.sec-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:clamp(24px,4vw,56px);flex-wrap:wrap;
+  margin-bottom:clamp(40px,5vw,72px);
+}
+.sec-head p{
+  max-width:36ch;color:var(--ink-soft);
+  font-size:.95rem;line-height:1.8;
+}
+
+.stars{color:var(--gold);letter-spacing:.16em;font-size:.9rem;line-height:1;}
+
+/* Text reveal masks */
+.line-mask{
+  display:block;overflow:hidden;padding-bottom:.05em;
+}
+.line-inner{
+  display:block;
+  transform:translateY(110%);
+  will-change:transform;
+}
+.word-mask{
+  display:inline-block;overflow:hidden;
+  padding-bottom:.05em;
+  vertical-align:bottom;
+}
+.word-inner{
+  display:inline-block;
+  transform:translateY(110%);
+  will-change:transform;
+}
+
+/* Image reveal */
+.reveal-img{
+  clip-path:inset(0 0 100% 0);
+  will-change:clip-path;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  padding:clamp(120px,16vh,180px) 0 clamp(60px,8vw,110px);
+  min-height:100vh;
+  position:relative;
+  display:flex;align-items:center;
+}
+.hero-grid{
+  max-width:1320px;margin:0 auto;width:100%;
+  padding:0 clamp(20px,5vw,64px);
+  display:grid;grid-template-columns:1.06fr .94fr;
+  gap:clamp(36px,5vw,80px);align-items:center;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:26px;
+  opacity:0;
+}
+.eyebrow .sep{opacity:.4;}
+.dot-live{
+  width:7px;height:7px;border-radius:50%;background:#3E8E5A;flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(62,142,90,.16);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+.dot-live.closed{background:#A6513B;box-shadow:0 0 0 3px rgba(166,81,59,.16);}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1;}
+  50%{transform:scale(.82);opacity:.7;}
+}
+
+.hero-title{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(46px,7vw,104px);
+  line-height:.96;letter-spacing:-.03em;
+  margin-bottom:30px;
+}
+.hero-title em{font-style:italic;color:var(--clay);}
+.hero-title .accent-line{display:block;}
+
+.hero-sub{
+  max-width:44ch;color:var(--ink-soft);
+  font-size:1rem;line-height:1.8;margin-bottom:36px;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+
+.hero-rating{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-top:34px;font-size:.78rem;color:var(--ink-soft);
+}
+.hero-rating strong{color:var(--ink);font-weight:500;}
+
+.hero-media{
+  position:relative;
+  padding-bottom:clamp(30px,4vw,50px);
+  perspective:1200px;
+}
+.hero-img{
+  aspect-ratio:4/5;overflow:hidden;border-radius:2px;
+  background:var(--sand);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.hero-img img{width:100%;height:100%;object-fit:cover;will-change:transform;}
+.hero-img-sm{
+  position:absolute;left:clamp(-30px,-3vw,-16px);bottom:0;
+  width:44%;aspect-ratio:1;margin:0;overflow:hidden;border-radius:2px;
+  border:10px solid var(--bone);background:var(--sand);
+  will-change:transform;
+}
+.hero-img-sm img{width:100%;height:100%;object-fit:cover;}
+.hero-caption{
+  margin-top:16px;font-size:.68rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-soft);
+  display:flex;align-items:center;gap:10px;
+}
+.hero-caption::before{content:'';width:24px;height:1px;background:var(--clay);opacity:.6;}
+
+.hero-scroll{
+  position:absolute;left:clamp(20px,5vw,64px);bottom:36px;
+  display:flex;align-items:center;gap:12px;
+  font-size:.58rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--ink-soft);opacity:0;
+}
+.hero-scroll-line{
+  width:1px;height:44px;background:var(--line);position:relative;overflow:hidden;
+}
+.hero-scroll-line::after{
+  content:'';position:absolute;top:0;left:0;width:100%;height:50%;
+  background:var(--clay);
+  animation:scroll-line 2s ease-in-out infinite;
+}
+@keyframes scroll-line{
+  0%{transform:translateY(-100%);}
+  100%{transform:translateY(200%);}
+}
+
+/* =========================================================
+   MARQUEE
+   ========================================================= */
+.marquee{
+  overflow:hidden;padding:28px 0;background:var(--paper);
+  border-top:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  position:relative;
+}
+.marquee-track{
+  display:flex;width:max-content;will-change:transform;
+  animation:marquee 48s linear infinite;
+}
+.marquee-track span{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.35rem,2.3vw,2rem);
+  padding:0 clamp(18px,2.4vw,30px);white-space:nowrap;
+  color:var(--ink);opacity:.34;
+}
+.marquee-track span::after{
+  content:'✦';font-style:normal;color:var(--clay);
+  font-size:.55em;margin-left:clamp(18px,2.4vw,30px);
+  vertical-align:middle;opacity:.85;
+}
+@keyframes marquee{to{transform:translateX(-50%);}}
+
+/* =========================================================
+   COLLECTION
+   ========================================================= */
+.col-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(16px,2.2vw,30px);
+}
+.col-card{display:flex;flex-direction:column;}
+.col-img{
+  aspect-ratio:3/4;overflow:hidden;border-radius:2px;
+  background:var(--sand);margin-bottom:20px;
+  position:relative;
+}
+.col-img::after{
+  content:'';position:absolute;inset:0;background:var(--ink);
+  opacity:0;transition:opacity .6s var(--ease);
+  pointer-events:none;
+}
+.col-card:hover .col-img::after{opacity:.06;}
+.col-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 1.2s var(--ease);
+  will-change:transform;
+}
+.col-card:hover .col-img img{transform:scale(1.07);}
+.col-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+.col-top h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:1.5rem;letter-spacing:-.015em;
+}
+.col-num{font-size:.6rem;letter-spacing:.24em;color:var(--clay);font-weight:500;}
+.col-card p{margin-top:9px;font-size:.87rem;line-height:1.7;color:var(--ink-soft);}
+.col-arrow{
+  margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+  font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink);opacity:.55;
+  transition:opacity .35s,transform .35s var(--ease);
+}
+.col-card:hover .col-arrow{opacity:1;transform:translateX(4px);}
+
+/* =========================================================
+   CRAFT — STICKY IMAGE + SCROLLING STEPS
+   ========================================================= */
+.craft{background:var(--ink);color:var(--bone);}
+.craft .label{color:var(--gold);}
+.craft h2 em{color:var(--gold);}
+
+.craft-wrap{
+  max-width:1320px;margin:0 auto;
+  padding:0 clamp(20px,5vw,64px);
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(40px,6vw,96px);align-items:start;
+}
+.craft-copy{padding-top:clamp(20px,4vw,60px);}
+.craft-copy > .craft-head{margin-bottom:36px;}
+.craft-intro{
+  color:rgba(243,237,228,.72);font-size:.95rem;line-height:1.85;
+  max-width:44ch;margin-top:22px;
+}
+
+.steps{list-style:none;margin:36px 0 0;padding:0;}
+.step{
+  display:grid;grid-template-columns:42px 1fr;gap:16px;
+  padding:22px 0;border-top:1px solid rgba(243,237,228,.13);
+  opacity:.45;
+  transition:opacity .5s var(--ease);
+  cursor:default;
+}
+.step:last-child{border-bottom:1px solid rgba(243,237,228,.13);}
+.step.active{opacity:1;}
+.step-n{
+  font-family:var(--serif);font-style:italic;font-size:1rem;
+  color:var(--gold);padding-top:3px;
+}
+.step h4{
+  font-family:var(--serif);font-weight:400;font-size:1.12rem;
+  margin-bottom:6px;letter-spacing:.01em;
+}
+.step p{color:rgba(243,237,228,.62);font-size:.87rem;line-height:1.7;}
+
+.craft-media{
+  position:sticky;top:100px;
+  height:min(76vh,760px);
+  display:flex;flex-direction:column;gap:14px;
+}
+.craft-img-wrap{
+  position:relative;flex:1;overflow:hidden;border-radius:2px;
+  background:#2C2520;
+}
+.craft-img{
+  position:absolute;inset:0;
+  opacity:0;transition:opacity .8s var(--ease);
+}
+.craft-img.active{opacity:1;}
+.craft-img img{width:100%;height:100%;object-fit:cover;}
+.craft-img-tag{
+  position:absolute;left:18px;bottom:18px;z-index:2;
+  font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(243,237,228,.85);
+  display:flex;align-items:center;gap:8px;
+}
+.craft-img-tag::before{
+  content:'';width:18px;height:1px;background:var(--gold);
+}
+
+/* =========================================================
+   VIDEO / COMING SOON
+   ========================================================= */
+.video-section{
+  position:relative;background:var(--paper);
+  overflow:hidden;
+}
+.video-wrap{
+  max-width:1320px;margin:0 auto;
+  padding:0 clamp(20px,5vw,64px);
+  display:grid;grid-template-columns:1fr 1.2fr;
+  gap:clamp(40px,6vw,80px);align-items:center;
+}
+.video-copy .label{color:var(--clay);}
+.video-copy h2{margin-bottom:22px;}
+.video-copy p{
+  color:var(--ink-soft);font-size:.95rem;line-height:1.8;
+  max-width:42ch;margin-bottom:28px;
+}
+.video-coming{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 14px;border:1px dashed var(--line);
+  font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-soft);border-radius:2px;
+}
+.video-coming span{
+  width:6px;height:6px;border-radius:50%;background:var(--clay);
+  animation:pulse 1.6s ease-in-out infinite;
+}
+
+.video-thumb{
+  position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:2px;
+  background:var(--sand);cursor:pointer;
+}
+.video-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 1.4s var(--ease),filter .6s var(--ease);
+  will-change:transform;
+}
+.video-thumb:hover img{transform:scale(1.05);filter:brightness(.82);}
+.video-thumb::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(26,22,19,.35),rgba(26,22,19,.6));
+}
+.video-play{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  color:var(--bone);
+}
+.video-play-btn{
+  width:88px;height:88px;border-radius:50%;
+  border:1px solid rgba(243,237,228,.55);
+  display:grid;place-items:center;
+  transition:background .4s var(--ease),border-color .4s var(--ease),transform .4s var(--ease);
+}
+.video-thumb:hover .video-play-btn{
+  background:var(--clay);border-color:var(--clay);transform:scale(1.06);
+}
+.video-play-btn svg{width:22px;height:22px;margin-left:4px;}
+.video-play-tag{
+  font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;
+  opacity:.85;
+}
+
+/* =========================================================
+   HORIZONTAL GALLERY
+   ========================================================= */
+.gallery-section{
+  position:relative;
+  background:var(--bone);
+  overflow:hidden;
+}
+.gallery-pin{
+  height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:60px 0;
+}
+.gallery-top{
+  max-width:1320px;margin:0 auto;
+  padding:0 clamp(20px,5vw,64px);
+  width:100%;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:24px;flex-wrap:wrap;
+  margin-bottom:clamp(24px,3vw,44px);
+}
+.gallery-top .label{margin-bottom:0;}
+.gallery-hint{
+  font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-soft);display:flex;align-items:center;gap:10px;
+}
+.gallery-hint svg{width:16px;height:16px;opacity:.7;}
+
+.gallery-track-wrap{
+  display:flex;align-items:center;
+  padding-left:clamp(20px,5vw,64px);
+  will-change:transform;
+}
+.gallery-track{
+  display:flex;gap:clamp(14px,2vw,28px);
+  will-change:transform;
+}
+.gal-item{
+  position:relative;
+  flex-shrink:0;
+  width:clamp(280px,36vw,540px);
+  aspect-ratio:4/5;
+  overflow:hidden;border-radius:2px;
+  background:var(--sand);
+  cursor:pointer;
+}
+.gal-item:nth-child(2n){width:clamp(240px,30vw,460px);aspect-ratio:3/4;}
+.gal-item:nth-child(3n){width:clamp(320px,42vw,600px);aspect-ratio:5/4;align-self:flex-end;}
+.gal-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 1.4s var(--ease);
+  will-change:transform;
+}
+.gal-item:hover img{transform:scale(1.06);}
+.gal-item::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(26,22,19,.55));
+  pointer-events:none;
+}
+.gal-meta{
+  position:absolute;left:20px;right:20px;bottom:20px;z-index:2;
+  color:var(--bone);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+}
+.gal-meta h3{
+  font-family:var(--serif);font-weight:400;font-size:1.2rem;
+  letter-spacing:-.01em;line-height:1.2;
+}
+.gal-meta span{
+  font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;
+  opacity:.75;
+}
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+.reviews{background:var(--paper);}
+.rev-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(40px,5vw,64px);}
+.rev-score{
+  display:flex;flex-direction:column;gap:5px;
+  align-items:flex-end;text-align:right;
+}
+.rev-num{
+  font-family:var(--serif);font-weight:300;font-size:clamp(48px,7vw,86px);
+  line-height:1;letter-spacing:-.03em;
+  display:flex;align-items:baseline;gap:6px;
+}
+.rev-num em{font-style:normal;font-size:.42em;color:var(--ink-soft);}
+.rev-score p{font-size:.78rem;color:var(--ink-soft);}
+.rev-score strong{color:var(--ink);font-weight:500;}
+.rev-link{
+  margin-top:8px;font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--clay);border-bottom:1px solid transparent;
+  transition:border-color .35s;
+}
+.rev-link:hover{border-bottom-color:var(--clay);}
+
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,24px);}
+.rev-card{
+  background:var(--bone);border:1px solid var(--line-soft);border-radius:2px;
+  padding:clamp(24px,3vw,36px);
+  display:flex;flex-direction:column;gap:20px;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.rev-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -20px rgba(26,22,19,.16);}
+.rev-card blockquote{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.12rem;line-height:1.6;color:var(--ink);
+}
+.rev-card footer{
+  display:flex;align-items:center;gap:12px;
+  font-size:.76rem;color:var(--ink-soft);margin-top:auto;
+}
+.avatar{
+  width:36px;height:36px;border-radius:50%;background:var(--sand);
+  display:grid;place-items:center;flex-shrink:0;
+  font-family:var(--serif);font-size:.92rem;color:var(--clay-deep);
+}
+.rev-card footer b{display:block;color:var(--ink);font-weight:500;font-size:.82rem;}
+
+/* =========================================================
+   VISIT
+   ========================================================= */
+.visit-wrap{
+  max-width:1320px;margin:0 auto;
+  padding:0 clamp(20px,5vw,64px);
+  display:grid;grid-template-columns:.92fr 1.08fr;
+  gap:clamp(32px,5vw,68px);align-items:stretch;
+}
+.visit-info dl{display:grid;gap:0;margin:34px 0 0;}
+.visit-info dl > div{
+  display:grid;grid-template-columns:104px 1fr;gap:20px;
+  padding:18px 0;border-top:1px solid var(--line-soft);
+}
+.visit-info dl > div:last-child{border-bottom:1px solid var(--line-soft);}
+.visit-info dt{
+  font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--clay);padding-top:5px;font-weight:500;
+}
+.visit-info dd{margin:0;line-height:1.75;color:var(--ink-soft);font-size:.94rem;}
+.visit-info dd a{color:var(--ink);border-bottom:1px solid var(--line);transition:border-color .3s,color .3s;}
+.visit-info dd a:hover{color:var(--clay);border-bottom-color:var(--clay);}
+.visit-info .hours-note{font-size:.76rem;color:var(--ink-soft);opacity:.85;margin-top:14px;}
+.visit-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;}
+
+.visit-map{
+  min-height:460px;border-radius:2px;overflow:hidden;background:var(--sand);
+  position:relative;
+}
+.visit-map iframe{
+  display:block;width:100%;height:100%;min-height:460px;border:0;
+  filter:grayscale(.3) contrast(1.02);
+}
+
+/* =========================================================
+   CTA + CONCEPT BADGE
+   ========================================================= */
+.cta{
+  background:var(--clay-deep);color:var(--bone);text-align:center;
+  padding:clamp(80px,10vw,140px) clamp(20px,5vw,64px);
+  position:relative;overflow:hidden;
+}
+.cta::before{
+  content:'';position:absolute;top:50%;left:50%;
+  width:140%;height:140%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(192,138,62,.14) 0%,transparent 55%);
+  pointer-events:none;
+}
+.cta-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;}
+.cta .label{color:#EBC99B;}
+.cta .label::before{background:currentColor;}
+.cta h2{color:var(--bone);max-width:19ch;margin:0 auto 22px;font-size:clamp(36px,5vw,72px);}
+.cta h2 em{color:#EBC99B;}
+.cta p{
+  max-width:46ch;margin:0 auto 38px;
+  color:rgba(243,237,228,.78);font-size:.98rem;line-height:1.8;
+}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.cta .btn-solid{background:var(--bone);color:var(--ink);}
+.cta .btn-solid::before{background:var(--ink);}
+.cta .btn-solid:hover{color:var(--bone);}
+.cta .btn-ghost{border-color:rgba(243,237,228,.42);color:var(--bone);}
+.cta .btn-ghost:hover{background:var(--bone);border-color:var(--bone);color:var(--ink);}
+
+/* Concept badge */
+.concept-badge{
+  position:fixed;right:clamp(16px,2vw,28px);bottom:clamp(16px,2vw,28px);
+  z-index:8500;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:11px 16px 11px 14px;
+  background:var(--ink);color:var(--bone);
+  border-radius:999px;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+  cursor:pointer;
+  box-shadow:0 12px 30px -12px rgba(26,22,19,.4);
+  transition:transform .4s var(--ease),background .4s var(--ease);
+  opacity:0;transform:translateY(20px);
+  pointer-events:none;
+}
+.concept-badge.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.concept-badge:hover{background:var(--clay);}
+.concept-badge::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--gold);
+  animation:pulse 1.6s ease-in-out infinite;
+}
+.concept-badge span.arrow{
+  display:inline-block;transition:transform .4s var(--ease);
+}
+.concept-badge:hover span.arrow{transform:translateX(3px);}
+
+/* Concept modal */
+.concept-modal{
+  position:fixed;inset:0;z-index:9600;
+  background:rgba(26,22,19,.7);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  display:grid;place-items:center;
+  padding:clamp(16px,4vw,56px);
+  opacity:0;visibility:hidden;
+  transition:opacity .4s var(--ease),visibility .4s;
+}
+.concept-modal.open{opacity:1;visibility:visible;}
+.concept-card{
+  max-width:520px;width:100%;
+  background:var(--bone);border-radius:3px;
+  padding:clamp(28px,4vw,44px);
+  position:relative;
+  transform:translateY(20px) scale(.98);
+  transition:transform .5s var(--ease);
+}
+.concept-modal.open .concept-card{transform:translateY(0) scale(1);}
+.concept-card .label{margin-bottom:16px;}
+.concept-card h3{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(24px,3vw,32px);line-height:1.15;
+  letter-spacing:-.02em;margin-bottom:16px;
+}
+.concept-card h3 em{font-style:italic;color:var(--clay);}
+.concept-card p{
+  font-size:.92rem;line-height:1.75;color:var(--ink-soft);
+  margin-bottom:24px;
+}
+.concept-card .btn-solid{width:100%;justify-content:center;}
+.concept-close{
+  position:absolute;top:14px;right:14px;
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;
+  color:var(--ink-soft);
+  transition:background .3s,color .3s;
+}
+.concept-close:hover{background:var(--sand);color:var(--ink);}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer{
+  background:var(--ink);color:var(--bone);
+  padding:clamp(60px,8vw,110px) clamp(20px,5vw,64px) 28px;
+  position:relative;overflow:hidden;
+}
+.footer-inner{
+  max-width:1320px;margin:0 auto;position:relative;z-index:2;
+  display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr;gap:clamp(28px,4vw,48px);
+}
+.footer .brand-mark{color:var(--bone);font-size:1.6rem;display:block;margin-bottom:6px;}
+.footer .brand-sub{color:rgba(243,237,228,.5);}
+.footer-brand p{
+  margin-top:20px;max-width:30ch;
+  font-size:.86rem;line-height:1.85;color:rgba(243,237,228,.6);
+}
+.footer h4{
+  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;font-weight:500;
+}
+.footer-col a,
+.footer-col p{
+  display:block;font-size:.86rem;line-height:2.05;
+  color:rgba(243,237,228,.66);transition:color .3s;
+}
+.footer-col a:hover{color:var(--gold);}
+.footer-bottom{
+  max-width:1320px;margin:clamp(40px,5vw,60px) auto 0;
+  padding-top:24px;border-top:1px solid rgba(243,237,228,.12);
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  font-size:.72rem;color:rgba(243,237,228,.42);
+  position:relative;z-index:2;
+}
+.footer-bottom .demo{font-style:italic;color:rgba(192,138,62,.75);}
+.footer-watermark{
+  position:absolute;left:0;right:0;bottom:-4vw;z-index:1;
+  text-align:center;font-family:var(--serif);font-style:italic;
+  font-size:clamp(88px,20vw,290px);line-height:.8;letter-spacing:-.02em;
+  color:rgba(243,237,228,.045);
+  pointer-events:none;user-select:none;white-space:nowrap;
+}
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+.lightbox{
+  position:fixed;inset:0;z-index:9700;
+  background:rgba(20,16,13,.94);
+  display:grid;place-items:center;
+  padding:clamp(16px,4vw,56px);
+  opacity:0;visibility:hidden;
+  transition:opacity .4s var(--ease),visibility .4s;
+}
+.lightbox.open{opacity:1;visibility:visible;}
+.lightbox img{
+  max-width:100%;max-height:100%;object-fit:contain;border-radius:2px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.lb-close{
+  position:absolute;top:clamp(12px,2.5vw,26px);right:clamp(12px,2.5vw,26px);
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid rgba(243,237,228,.3);color:var(--bone);
+  display:grid;place-items:center;font-size:1.15rem;line-height:1;
+  transition:background .3s,border-color .3s;
+}
+.lb-close:hover{background:rgba(243,237,228,.14);border-color:var(--bone);}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width:1080px){
+  .col-grid{grid-template-columns:repeat(2,1fr);gap:clamp(18px,3vw,32px);}
+  .footer-inner{grid-template-columns:1.4fr 1fr 1fr;}
+  .footer-brand{grid-column:1/-1;}
+  .craft-wrap{grid-template-columns:1fr;gap:48px;}
+  .craft-media{position:static;height:auto;min-height:420px;}
+  .craft-img-wrap{height:min(60vh,520px);}
+}
+
+@media (max-width:940px){
+  .nav-links,.nav-cta{display:none;}
+  .nav-toggle{display:block;}
+
+  .hero{min-height:auto;padding-top:clamp(104px,14vh,140px);}
+  .hero-grid{grid-template-columns:1fr;gap:clamp(36px,7vw,56px);}
+  .hero-media{max-width:520px;width:100%;}
+  .hero-img{aspect-ratio:5/4;}
+  .hero-img-sm{width:38%;left:auto;right:-10px;bottom:0;}
+  .hero-scroll{display:none;}
+
+  .video-wrap{grid-template-columns:1fr;gap:36px;}
+
+  .rev-grid{grid-template-columns:1fr;}
+  .rev-score{align-items:flex-start;text-align:left;}
+
+  .visit-wrap{grid-template-columns:1fr;}
+  .visit-map,.visit-map iframe{min-height:340px;}
+}
+
+@media (max-width:680px){
+  .gal-item,
+  .gal-item:nth-child(2n),
+  .gal-item:nth-child(3n){
+    width:min(78vw,420px);
+    aspect-ratio:4/5;
+    align-self:auto;
+  }
+  .hero-img-sm{border-width:7px;}
+  .hero-rating{font-size:.74rem;}
+  .cta h2{max-width:16ch;}
+  .concept-badge{font-size:.56rem;padding:9px 13px 9px 11px;}
+}
+
+@media (max-width:520px){
+  .col-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr;gap:32px;}
+  .visit-info dl > div{grid-template-columns:1fr;gap:4px;}
+  .visit-info dt{padding-top:0;}
+  .hero-actions .btn{width:100%;}
+  .craft-media .craft-img-wrap{height:min(50vh,420px);}
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .line-inner,.word-inner{transform:none !important;}
+  .reveal-img{clip-path:none !important;}
+  .marquee-track{animation:none;}
+  .cursor,.cursor-dot{display:none;}
+  body.no-cursor{cursor:auto;}
+}
+</style>
+</head>
+<body class="loading no-cursor">
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Custom cursor -->
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<!-- Scroll progress -->
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader-inner">
+    <div class="preloader-logo">
+      <span>D</span><span>r</span><span>e</span><span>a</span><span>m</span>
+    </div>
+    <div class="preloader-tag">Furniture · Addis Ababa</div>
+    <div class="preloader-count">
+      <span class="count-num">0</span><small>%</small>
+    </div>
+    <div class="preloader-bar"><span></span></div>
+  </div>
+</div>
+<div class="preloader-curtain" aria-hidden="true"></div>
+
+<!-- Nav -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand" aria-label="Dream Furniture — home">
+      <span class="brand-mark">Dream</span>
+      <span class="brand-sub">Furniture · Addis</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#collection">Collection</a>
+      <a href="#craft">Craft</a>
+      <a href="#film">Film</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a href="tel:+251937769393" class="nav-cta magnetic">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3z"/>
+      </svg>
+      093 776 9393
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#collection" class="mm-link">Collection <span>01</span></a>
+  <a href="#craft" class="mm-link">Craft <span>02</span></a>
+  <a href="#film" class="mm-link">Film <span>03</span></a>
+  <a href="#gallery" class="mm-link">Gallery <span>04</span></a>
+  <a href="#reviews" class="mm-link">Reviews <span>05</span></a>
+  <a href="#visit" class="mm-link">Visit <span>06</span></a>
+  <div class="mm-foot">
+    <a href="tel:+251937769393">093 776 9393</a>
+    <span>XQ76+99 · Addis Ababa</span>
+    <span>Open daily until 7 PM</span>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <span class="dot-live" id="statusDot" aria-hidden="true"></span>
+        <span id="statusText">Open · Closes 7 PM</span>
+        <span class="sep">·</span>
+        <span>Addis Ababa</span>
+      </div>
+
+      <h1 class="hero-title" data-split="hero">
+        Furniture<br>
+        made to be<br>
+        <em>lived in.</em>
+      </h1>
+
+      <p class="hero-sub">
+        We design and hand-build sofas, dining tables, beds and one-off
+        commissions in our Addis Ababa workshop — solid wood, honest joinery,
+        and finishes that age beautifully.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#collection" class="btn btn-solid magnetic">
+          <span>Explore the collection</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="tel:+251937769393" class="btn btn-ghost magnetic">Call the workshop</a>
+      </div>
+
+      <div class="hero-rating">
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <span><strong>5.0</strong> · 10 Google reviews</span>
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <figure class="hero-img reveal-img" data-hero-tilt>
+        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200&auto=format&fit=crop"
+             alt="A warm living room with a hand-built sofa and wooden coffee table" fetchpriority="high">
+      </figure>
+      <figure class="hero-img-sm reveal-img" data-hero-tilt-sm>
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=700&auto=format&fit=crop"
+             alt="A solid wood chair with a sculpted seat">
+      </figure>
+      <p class="hero-caption">Walnut lounge chair · hand-finished in our workshop</p>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Solid wood</span><span>Hand joinery</span><span>Natural oil finish</span>
+    <span>Made in Addis</span><span>Custom commissions</span><span>Built to last</span>
+    <span>Solid wood</span><span>Hand joinery</span><span>Natural oil finish</span>
+    <span>Made in Addis</span><span>Custom commissions</span><span>Built to last</span>
+  </div>
+</div>
+
+<!-- Collection -->
+<section class="section" id="collection">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="label" data-reveal-label>01 — The Collection</span>
+        <h2 data-split="lines">Made for the rooms<br>you <em>actually use.</em></h2>
+      </div>
+      <p data-reveal-fade>
+        Every piece is built to order in our workshop. Choose a design from the
+        collection, or bring us a sketch and we'll build it around your space.
+      </p>
+    </div>
+
+    <div class="col-grid">
+      <article class="col-card">
+        <div class="col-img reveal-img">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=900&auto=format&fit=crop"
+               alt="Sofa and armchairs in a softly lit living room" loading="lazy">
+        </div>
+        <div class="col-top"><h3 data-reveal-fade>Living</h3><span class="col-num" data-reveal-fade>01</span></div>
+        <p data-reveal-fade>Sofas, lounge chairs and coffee tables built for long evenings.</p>
+        <span class="col-arrow" data-reveal-fade>Custom sizes →</span>
+      </article>
+
+      <article class="col-card">
+        <div class="col-img reveal-img">
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=900&auto=format&fit=crop"
+               alt="A dining area with a solid wooden table and pendant lighting" loading="lazy">
+        </div>
+        <div class="col-top"><h3 data-reveal-fade>Dining</h3><span class="col-num" data-reveal-fade>02</span></div>
+        <p data-reveal-fade>Tables, benches and sideboards sized to your family and your room.</p>
+        <span class="col-arrow" data-reveal-fade>Custom sizes →</span>
+      </article>
+
+      <article class="col-card">
+        <div class="col-img reveal-img">
+          <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=900&auto=format&fit=crop"
+               alt="A calm bedroom with a wooden bed frame and linen bedding" loading="lazy">
+        </div>
+        <div class="col-top"><h3 data-reveal-fade>Bedroom</h3><span class="col-num" data-reveal-fade>03</span></div>
+        <p data-reveal-fade>Beds, wardrobes and nightstands — quiet, sturdy, and built to last.</p>
+        <span class="col-arrow" data-reveal-fade>Custom sizes →</span>
+      </article>
+
+      <article class="col-card">
+        <div class="col-img reveal-img">
+          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=900&auto=format&fit=crop"
+               alt="A furnished room used for a custom interior project" loading="lazy">
+        </div>
+        <div class="col-top"><h3 data-reveal-fade>Custom</h3><span class="col-num" data-reveal-fade>04</span></div>
+        <p data-reveal-fade>Commissions for homes, cafés and offices — from one bench to a full fit-out.</p>
+        <span class="col-arrow" data-reveal-fade>Start a project →</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Craft -->
+<section class="section craft" id="craft">
+  <div class="craft-wrap">
+    <div class="craft-copy">
+      <div class="craft-head">
+        <span class="label" data-reveal-label>02 — The Craft</span>
+        <h2 data-split="lines">Wood, patience,<br>and a <em>good eye.</em></h2>
+        <p class="craft-intro" data-reveal-fade>
+          Dream Furniture started as a small workshop with a few hand tools and
+          a simple belief: furniture should be made slowly, from real materials,
+          by people who will still be here when you need it repaired.
+        </p>
+        <p class="craft-intro" data-reveal-fade>
+          Today we build everything on site in Addis Ababa — cutting, joining,
+          sanding and finishing under one roof, so nothing leaves the workshop
+          until it's right.
+        </p>
+      </div>
+
+      <ol class="steps" id="craftSteps">
+        <li class="step active" data-step="0">
+          <span class="step-n">01</span>
+          <div>
+            <h4>Conversation</h4>
+            <p>We start with your room, your measurements and how you actually live in it.</p>
+          </div>
+        </li>
+        <li class="step" data-step="1">
+          <span class="step-n">02</span>
+          <div>
+            <h4>Selection</h4>
+            <p>We choose the timber and finish together — grain, tone and durability.</p>
+          </div>
+        </li>
+        <li class="step" data-step="2">
+          <span class="step-n">03</span>
+          <div>
+            <h4>Joinery</h4>
+            <p>Frames are cut and joined by hand, then checked square before assembly.</p>
+          </div>
+        </li>
+        <li class="step" data-step="3">
+          <span class="step-n">04</span>
+          <div>
+            <h4>Finishing</h4>
+            <p>Hand-sanded and oiled in several passes for a finish that ages with use.</p>
+          </div>
+        </li>
+        <li class="step" data-step="4">
+          <span class="step-n">05</span>
+          <div>
+            <h4>Delivery</h4>
+            <p>Delivered and assembled in your home, across Addis Ababa.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="craft-media">
+      <div class="craft-img-wrap">
+        <div class="craft-img active">
+          <img src="https://images.unsplash.com/photo-1550226891-ef816aed4a98?q=80&w=1000&auto=format&fit=crop"
+               alt="A finished wooden chair in the workshop" loading="lazy">
+          <span class="craft-img-tag">Finished · Lounge chair</span>
+        </div>
+        <div class="craft-img">
+          <img src="https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?q=80&w=1000&auto=format&fit=crop"
+               alt="Selection of timber boards" loading="lazy">
+          <span class="craft-img-tag">Selection · Oak &amp; walnut</span>
+        </div>
+        <div class="craft-img">
+          <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1000&auto=format&fit=crop"
+               alt="A woodworking workbench with hand tools in the workshop" loading="lazy">
+          <span class="craft-img-tag">Joinery · Workbench</span>
+        </div>
+        <div class="craft-img">
+          <img src="https://images.unsplash.com/photo-1601335260159-4c4a3e9a1e2e?q=80&w=1000&auto=format&fit=crop"
+               alt="Hands finishing a wooden surface" loading="lazy">
+          <span class="craft-img-tag">Finishing · Hand oiled</span>
+        </div>
+        <div class="craft-img">
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1000&auto=format&fit=crop"
+               alt="A finished dining table in a home" loading="lazy">
+          <span class="craft-img-tag">Delivery · In your home</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Film / Coming Soon -->
+<section class="section video-section" id="film">
+  <div class="video-wrap">
+    <div class="video-copy">
+      <span class="label" data-reveal-label>03 — In Motion</span>
+      <h2 data-split="lines">See the workshop<br><em>come alive.</em></h2>
+      <p data-reveal-fade>
+        A short film from inside our Addis Ababa workshop — the sound of the
+        plane, the smell of oiled oak, and the pieces that leave the bench
+        every week.
+      </p>
+      <div class="video-coming" data-reveal-fade>
+        <span></span> Film coming soon · 2 min
+      </div>
+    </div>
+
+    <div class="video-thumb reveal-img" data-play>
+      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1400&auto=format&fit=crop"
+           alt="A quiet interior of a handmade furniture showroom">
+      <div class="video-play">
+        <div class="video-play-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="video-play-tag">Workshop film · Coming soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Horizontal Gallery -->
+<section class="gallery-section" id="gallery">
+  <div class="gallery-pin">
+    <div class="gallery-top">
+      <div>
+        <span class="label" data-reveal-label>04 — Gallery</span>
+        <h2 data-split="lines">The work, <em>up close.</em></h2>
+      </div>
+      <div class="gallery-hint">
+        <span>Scroll to explore</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </div>
+
+    <div class="gallery-track-wrap" id="galleryTrackWrap">
+      <div class="gallery-track" id="galleryTrack">
+        <div class="gal-item" data-lb>
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format&fit=crop"
+               alt="A deep-seated sofa in a softly lit room" loading="lazy">
+          <div class="gal-meta"><h3>Living room</h3><span>01 / 06</span></div>
+        </div>
+        <div class="gal-item" data-lb>
+          <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop"
+               alt="A sculpted wooden chair" loading="lazy">
+          <div class="gal-meta"><h3>Sculpted chair</h3><span>02 / 06</span></div>
+        </div>
+        <div class="gal-item" data-lb>
+          <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=1200&auto=format&fit=crop"
+               alt="A bedroom with a wooden bed and soft textiles" loading="lazy">
+          <div class="gal-meta"><h3>Bedroom suite</h3><span>03 / 06</span></div>
+        </div>
+        <div class="gal-item" data-lb>
+          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop"
+               alt="A minimal interior with wooden furniture" loading="lazy">
+          <div class="gal-meta"><h3>Minimal interior</h3><span>04 / 06</span></div>
+        </div>
+        <div class="gal-item" data-lb>
+          <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1200&auto=format&fit=crop"
+               alt="Tools and timber in the workshop" loading="lazy">
+          <div class="gal-meta"><h3>The workshop</h3><span>05 / 06</span></div>
+        </div>
+        <div class="gal-item" data-lb>
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop"
+               alt="A finished interior with a dining table" loading="lazy">
+          <div class="gal-meta"><h3>Dining at home</h3><span>06 / 06</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section class="section reviews" id="reviews">
+  <div class="container">
+    <div class="rev-head">
+      <div>
+        <span class="label" data-reveal-label>05 — Reviews</span>
+        <h2 data-split="lines">Rated <em>5.0</em> by the people<br>who live with it.</h2>
+      </div>
+      <div class="rev-score">
+        <div class="rev-num"><span class="count-5">0</span><em>.0</em></div>
+        <span class="stars" aria-label="Rated 5 out of 5">★★★★★</span>
+        <p>Based on <strong>10</strong> Google reviews</p>
+        <a class="rev-link"
+           href="https://www.google.com/maps/search/?api=1&query=Dream+Furniture+Addis+Ababa"
+           target="_blank" rel="noopener">Read on Google →</a>
+      </div>
+    </div>
+
+    <div class="rev-grid">
+      <article class="rev-card" data-reveal-fade>
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <blockquote>“They built a dining table for our family of six. Two years on it still looks like the day it arrived — you can feel the care in every joint.”</blockquote>
+        <footer>
+          <span class="avatar" aria-hidden="true">S</span>
+          <span><b>Selam T.</b>Google review</span>
+        </footer>
+      </article>
+      <article class="rev-card" data-reveal-fade>
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <blockquote>“We came with a rough sketch and left with something better than the picture. Honest pricing, and they delivered exactly when they said.”</blockquote>
+        <footer>
+          <span class="avatar" aria-hidden="true">D</span>
+          <span><b>Dawit M.</b>Google review</span>
+        </footer>
+      </article>
+      <article class="rev-card" data-reveal-fade>
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <blockquote>“Beautiful chairs, sturdy work, and genuinely kind people. My living room finally feels finished.”</blockquote>
+        <footer>
+          <span class="avatar" aria-hidden="true">H</span>
+          <span><b>Hanna G.</b>Google review</span>
+        </footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Visit -->
+<section class="section" id="visit">
+  <div class="visit-wrap">
+    <div class="visit-info">
+      <span class="label" data-reveal-label>06 — Visit</span>
+      <h2 data-split="lines">Come see the<br><em>work in person.</em></h2>
+
+      <dl data-reveal-fade>
+        <div>
+          <dt>Address</dt>
+          <dd>XQ76+99, Around<br>Addis Ababa, Ethiopia</dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd><a href="tel:+251937769393">093 776 9393</a></dd>
+        </div>
+        <div>
+          <dt>Hours</dt>
+          <dd>Monday – Saturday · 8:30 AM – 7:00 PM<br>Sunday · Closed</dd>
+        </div>
+      </dl>
+
+      <p class="hours-note" data-reveal-fade>Hours can vary on public holidays — please call ahead.</p>
+
+      <div class="visit-actions" data-reveal-fade>
+        <a class="btn btn-solid magnetic"
+           href="https://www.google.com/maps/dir/?api=1&destination=8.9634636,38.7242271"
+           target="_blank" rel="noopener">
+          <span>Get directions</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn btn-ghost magnetic" href="tel:+251937769393">Call the workshop</a>
+      </div>
+    </div>
+
+    <div class="visit-map reveal-img">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d33950.884754956496!2d38.724227091989356!3d8.963463600000006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85d9a9f788bf%3A0x3408620fa1ec8fec!2sDream%20Furniture!5e1!3m2!1sen!2set!4v1795509395615!5m2!1sen!2set"
+        title="Map showing Dream Furniture, Addis Ababa"
+        loading="lazy" allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <span class="label" data-reveal-label>Concept Preview</span>
+    <h2 data-split="lines">This could be<br><em>your website.</em></h2>
+    <p data-reveal-fade>
+      What you're looking at is a fully-designed, animation-ready concept for
+      Dream Furniture. Launch it, customize it, and start turning browsers into
+      showroom visits.
+    </p>
+    <div class="cta-actions" data-reveal-fade>
+      <a class="btn btn-solid magnetic" href="tel:+251937769393">
+        <span>Let's launch it</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
+      </a>
+      <a class="btn btn-ghost magnetic" href="#collection">Explore the site</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark">Dream</span>
+      <span class="brand-sub">Furniture · Addis</span>
+      <p>Hand-built furniture for real homes. Solid wood, honest joinery, and finishes that age beautifully.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <a href="#collection">Collection</a>
+      <a href="#craft">Craft</a>
+      <a href="#film">Film</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+    </div>
+    <div class="footer-col">
+      <h4>Visit</h4>
+      <p>XQ76+99<br>Around, Addis Ababa<br>Ethiopia</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:+251937769393">093 776 9393</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Dream+Furniture+Addis+Ababa" target="_blank" rel="noopener">Google Maps</a>
+      <a href="#visit">Opening hours</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year">2025</span> Dream Furniture. All rights reserved.</span>
+    <span class="demo">Concept preview · ready to launch</span>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">Dream</div>
+</footer>
+
+<!-- Concept badge -->
+<button class="concept-badge" id="conceptBadge" aria-label="About this concept preview">
+  Concept preview <span class="arrow">→</span>
+</button>
+
+<!-- Concept modal -->
+<div class="concept-modal" id="conceptModal" role="dialog" aria-modal="true" aria-labelledby="conceptTitle">
+  <div class="concept-card">
+    <button class="concept-close" id="conceptClose" aria-label="Close">✕</button>
+    <span class="label">Concept Preview</span>
+    <h3 id="conceptTitle">A website built to<br><em>make people walk in.</em></h3>
+    <p>
+      This is a complete design concept for Dream Furniture — cinematic animation,
+      mobile-first layout, Google Maps built in, and copy ready to publish.
+      Every section is built. It just needs your photos, your voice, and a final
+      pass before launch.
+    </p>
+    <a class="btn btn-solid" href="tel:+251937769393">
+      <span>Let's finish this site</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-close" type="button" aria-label="Close image viewer">✕</button>
+  <img src="" alt="">
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isTouch = window.matchMedia('(pointer:coarse)').matches;
+
+  /* =====================================================
+     LENIS SMOOTH SCROLL
+     ===================================================== */
+  var lenis = null;
+  if (!reduced && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      smoothWheel: true,
+      wheelMultiplier: 1
+    });
+    lenis.stop(); // wait for preloader
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  function startScroll() { if (lenis) lenis.start(); }
+  function stopScroll()  { if (lenis) lenis.stop(); }
+
+  function scrollToTarget(target) {
+    if (lenis) lenis.scrollTo(target, { duration: 1.4 });
+    else {
+      var el = typeof target === 'string' ? document.querySelector(target) : target;
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  /* =====================================================
+     SPLIT TEXT — wrap chars / words / lines
+     ===================================================== */
+  function splitTextElement(el) {
+    if (!el || typeof SplitType === 'undefined') return null;
+    return new SplitType(el, { types: 'lines,words', lineClass: 'line-mask', wordClass: 'word-inner' });
+  }
+
+  // Wrap line-mask children in an overflow hidden wrapper
+  function prepSplitLines(selector) {
+    document.querySelectorAll(selector).forEach(function (el) {
+      var split = new SplitType(el, { types: 'lines', lineClass: 'line-inner' });
+      split.lines.forEach(function (line) {
+        var mask = document.createElement('span');
+        mask.className = 'line-mask';
+        line.parentNode.insertBefore(mask, line);
+        mask.appendChild(line);
+      });
+    });
+  }
+
+  prepSplitLines('[data-split="lines"]');
+
+  /* =====================================================
+     CUSTOM CURSOR
+     ===================================================== */
+  var cursor = document.querySelector('.cursor');
+  var cursorDot = document.querySelector('.cursor-dot');
+  var cursorX = gsap.quickTo(cursor, 'x', { duration: 0.5, ease: 'power3.out' });
+  var cursorY = gsap.quickTo(cursor, 'y', { duration: 0.5, ease: 'power3.out' });
+  var dotX = gsap.quickTo(cursorDot, 'x', { duration: 0.12, ease: 'power3.out' });
+  var dotY = gsap.quickTo(cursorDot, 'y', { duration: 0.12, ease: 'power3.out' });
+
+  if (!isTouch && !reduced) {
+    window.addEventListener('mousemove', function (e) {
+      cursorX(e.clientX); cursorY(e.clientY);
+      dotX(e.clientX);    dotY(e.clientY);
+    }, { passive: true });
+
+    document.querySelectorAll('a, button, .gal-item, .col-card, .step, .video-thumb, input, select, textarea').forEach(function (el) {
+      el.addEventListener('mouseenter', function () { cursor.classList.add('hover'); });
+      el.addEventListener('mouseleave', function () { cursor.classList.remove('hover'); });
+    });
+
+    document.addEventListener('mousedown', function () { cursor.classList.add('click'); });
+    document.addEventListener('mouseup',   function () { cursor.classList.remove('click'); });
+    document.addEventListener('mouseleave', function () {
+      cursor.classList.add('hide'); cursorDot.classList.add('hide');
+    });
+    document.addEventListener('mouseenter', function () {
+      cursor.classList.remove('hide'); cursorDot.classList.remove('hide');
+    });
+  }
+
+  /* =====================================================
+     MAGNETIC BUTTONS
+     ===================================================== */
+  if (!isTouch && !reduced) {
+    document.querySelectorAll('.magnetic').forEach(function (el) {
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width / 2) * 0.28;
+        var y = (e.clientY - r.top - r.height / 2) * 0.28;
+        gsap.to(el, { x: x, y: y, duration: 0.55, ease: 'power3.out' });
+      });
+      el.addEventListener('mouseleave', function () {
+        gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
+      });
+    });
+  }
+
+  /* =====================================================
+     HERO MOUSE PARALLAX
+     ===================================================== */
+  if (!isTouch && !reduced) {
+    var heroImg = document.querySelector('.hero-img');
+    var heroImgSm = document.querySelector('.hero-img-sm');
+
+    if (heroImg && heroImgSm) {
+      document.querySelector('.hero').addEventListener('mousemove', function (e) {
+        var cx = (e.clientX / window.innerWidth - 0.5);
+        var cy = (e.clientY / window.innerHeight - 0.5);
+        gsap.to(heroImg,   { rotationY: cx * 6,  rotationX: -cy * 6,  x: cx * 14, y: cy * 14, duration: 0.9, ease: 'power3.out' });
+        gsap.to(heroImgSm, { rotationY: cx * 10, rotationX: -cy * 10, x: cx * 22, y: cy * 22, duration: 1.1, ease: 'power3.out' });
+      }, { passive: true });
+    }
+  }
+
+  /* =====================================================
+     PRELOADER SEQUENCE
+     ===================================================== */
+  function runEntrance() {
+    document.body.classList.remove('loading');
+    startScroll();
+
+    var tl = gsap.timeline();
+
+    // Hero eyebrow fade
+    tl.to('.eyebrow', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0);
+
+    // Hero title — line-inner slide up
+    tl.to('.hero-title .line-inner', {
+      yPercent: 0,
+      duration: 1.2,
+      stagger: 0.1,
+      ease: 'power4.out'
+    }, 0.1);
+
+    // Hero sub / actions / rating
+    tl.from('.hero-sub', { y: 24, opacity: 0, duration: 0.9, ease: 'power3.out' }, 0.6);
+    tl.from('.hero-actions', { y: 24, opacity: 0, duration: 0.9, ease: 'power3.out' }, 0.75);
+    tl.from('.hero-rating', { y: 24, opacity: 0, duration: 0.9, ease: 'power3.out' }, 0.9);
+    tl.from('.hero-caption', { y: 14, opacity: 0, duration: 0.8, ease: 'power3.out' }, 1.0);
+    tl.to('.hero-scroll', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 1.2);
+
+    // Nav entrance
+    tl.from('.brand, .nav-links a, .nav-cta', {
+      y: -20, opacity: 0, duration: 0.9, stagger: 0.05, ease: 'power3.out'
+    }, 0.2);
+
+    // Hero images reveal
+    gsap.to('.hero-img, .hero-img-sm', {
+      clipPath: 'inset(0% 0 0 0)',
+      duration: 1.4,
+      delay: 0.3,
+      ease: 'power4.inOut',
+      stagger: 0.15
+    });
+
+    // Refresh ScrollTriggers
+    setTimeout(function () { ScrollTrigger.refresh(); }, 400);
+  }
+
+  function initPreloader() {
+    var pre = document.getElementById('preloader');
+    var curtain = document.querySelector('.preloader-curtain');
+
+    if (reduced) {
+      pre.style.display = 'none';
+      curtain.style.display = 'none';
+      document.querySelectorAll('.line-inner, .word-inner').forEach(function (el) { el.style.transform = 'none'; });
+      document.querySelectorAll('.reveal-img').forEach(function (el) { el.style.clipPath = 'inset(0 0 0 0)'; });
+      runEntrance();
+      return;
+    }
+
+    // Animate logo chars in
+    gsap.to('.preloader-logo span', {
+      y: 0, duration: 0.9, stagger: 0.06, ease: 'power4.out'
+    });
+
+    // Animate tagline
+    gsap.to('.preloader-tag', { opacity: 1, duration: 0.6, delay: 0.5, ease: 'power2.out' });
+
+    // Counter
+    var count = { v: 0 };
+    var countEl = document.querySelector('.count-num');
+    var barFill = document.querySelector('.preloader-bar span');
+
+    gsap.to(count, {
+      v: 100,
+      duration: 2.0,
+      ease: 'power2.inOut',
+      delay: 0.3,
+      onUpdate: function () {
+        countEl.textContent = Math.round(count.v);
+        barFill.style.width = count.v + '%';
+      },
+      onComplete: function () {
+        // Curtain lift
+        var tl = gsap.timeline({ onComplete: runEntrance });
+
+        tl.to('.preloader-inner', {
+          opacity: 0, y: -30, duration: 0.5, ease: 'power2.in'
+        }, 0);
+        tl.to('.preloader', {
+          yPercent: -100, duration: 1.1, ease: 'power4.inOut'
+        }, 0.1);
+        tl.to(curtain, {
+          yPercent: 0, duration: 0.8, ease: 'power4.inOut'
+        }, 0);
+        tl.to(curtain, {
+          yPercent: -100, duration: 0.9, ease: 'power4.inOut'
+        }, 0.5);
+        tl.set('.preloader', { display: 'none' });
+      }
+    });
+  }
+
+  initPreloader();
+
+  /* =====================================================
+     SCROLL PROGRESS BAR
+     ===================================================== */
+  var progress = document.getElementById('progress');
+  function updateProgress() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? h.scrollTop / max : 0;
+    progress.style.transform = 'scaleX(' + p + ')';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* =====================================================
+     NAV SCROLLED STATE
+     ===================================================== */
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 24);
+  }, { passive: true });
+
+  /* =====================================================
+     MOBILE MENU
+     ===================================================== */
+  var toggle = document.getElementById('navToggle');
+  var menu = document.getElementById('mobileMenu');
+
+  function setMenu(open) {
+    menu.classList.toggle('open', open);
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    document.body.classList.toggle('locked', open);
+    open ? stopScroll() : startScroll();
+  }
+
+  toggle.addEventListener('click', function () {
+    setMenu(!menu.classList.contains('open'));
+  });
+
+  menu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = link.getAttribute('href');
+      setMenu(false);
+      setTimeout(function () { scrollToTarget(id); }, 300);
+    });
+  });
+
+  /* =====================================================
+     SMOOTH SCROLL FOR ALL ANCHORS
+     ===================================================== */
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      if (!id || id === '#') return;
+      var target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      scrollToTarget(id);
+    });
+  });
+
+  /* =====================================================
+     SCROLL REVEALS (GSAP + ScrollTrigger)
+     ===================================================== */
+  if (!reduced) {
+    // Hero title already animated in entrance.
+
+    // Section labels
+    gsap.utils.toArray('[data-reveal-label]').forEach(function (el) {
+      gsap.from(el, {
+        opacity: 0, y: 20, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' }
+      });
+    });
+
+    // Split line headings
+    gsap.utils.toArray('[data-split="lines"]').forEach(function (el) {
+      var inners = el.querySelectorAll('.line-inner');
+      if (!inners.length) return;
+      gsap.to(inners, {
+        yPercent: 0,
+        duration: 1.2,
+        stagger: 0.08,
+        ease: 'power4.out',
+        scrollTrigger: { trigger: el, start: 'top 86%' }
+      });
+    });
+
+    // Fade-up
+    gsap.utils.toArray('[data-reveal-fade]').forEach(function (el) {
+      gsap.from(el, {
+        opacity: 0, y: 26, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 90%' }
+      });
+    });
+
+    // Image clip reveals
+    gsap.utils.toArray('.reveal-img').forEach(function (el) {
+      gsap.to(el, {
+        clipPath: 'inset(0% 0 0 0)',
+        duration: 1.4,
+        ease: 'power4.inOut',
+        scrollTrigger: { trigger: el, start: 'top 88%' }
+      });
+    });
+
+    // Collection cards stagger
+    gsap.utils.toArray('.col-card').forEach(function (card, i) {
+      gsap.from(card, {
+        y: 50, opacity: 0, duration: 1.1, ease: 'power3.out',
+        delay: (i % 4) * 0.08,
+        scrollTrigger: { trigger: card, start: 'top 90%' }
+      });
+    });
+
+    // Reviews cards
+    gsap.utils.toArray('.rev-card').forEach(function (card, i) {
+      gsap.from(card, {
+        y: 40, opacity: 0, duration: 1, ease: 'power3.out',
+        delay: (i % 3) * 0.1,
+        scrollTrigger: { trigger: card, start: 'top 92%' }
+      });
+    });
+  } else {
+    // Reduced motion: just show everything
+    document.querySelectorAll('[data-reveal-label],[data-reveal-fade]').forEach(function (el) {
+      el.style.opacity = 1;
+    });
+    document.querySelectorAll('.line-inner').forEach(function (el) { el.style.transform = 'none'; });
+  }
+
+  /* =====================================================
+     HERO PARALLAX ON SCROLL
+     ===================================================== */
+  if (!reduced) {
+    gsap.to('.hero-img', {
+      yPercent: 8, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
+    });
+    gsap.to('.hero-copy', {
+      yPercent: -12, opacity: 0.5, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
+    });
+  }
+
+  /* =====================================================
+     CRAFT — STICKY IMAGE + ACTIVE STEP
+     ===================================================== */
+  var steps = document.querySelectorAll('.step');
+  var craftImgs = document.querySelectorAll('.craft-img');
+
+  steps.forEach(function (step) {
+    step.addEventListener('mouseenter', function () {
+      var idx = parseInt(step.getAttribute('data-step'), 10);
+      steps.forEach(function (s) { s.classList.remove('active'); });
+      step.classList.add('active');
+      craftImgs.forEach(function (img, i) {
+        img.classList.toggle('active', i === idx);
+      });
+    });
+
+    // Scroll-triggered activation
+    ScrollTrigger.create({
+      trigger: step,
+      start: 'top 60%',
+      end: 'bottom 40%',
+      onEnter: function () { activateStep(step); },
+      onEnterBack: function () { activateStep(step); }
+    });
+  });
+
+  function activateStep(step) {
+    var idx = parseInt(step.getAttribute('data-step'), 10);
+    steps.forEach(function (s) { s.classList.remove('active'); });
+    step.classList.add('active');
+    craftImgs.forEach(function (img, i) {
+      img.classList.toggle('active', i === idx);
+    });
+  }
+
+  /* =====================================================
+     HORIZONTAL GALLERY PIN
+     ===================================================== */
+  if (!reduced) {
+    var gallerySection = document.querySelector('.gallery-section');
+    var galleryTrack = document.getElementById('galleryTrack');
+
+    function setupGallery() {
+      var trackWidth = galleryTrack.scrollWidth;
+      var viewport = window.innerWidth;
+      var distance = Math.max(0, trackWidth - viewport + 64);
+
+      gsap.to(galleryTrack, {
+        x: -distance,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: gallerySection,
+          start: 'top top',
+          end: function () { return '+=' + (distance + window.innerHeight * 0.4); },
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          anticipatePin: 1
+        }
+      });
+    }
+
+    if (galleryTrack) {
+      // Wait for images to load
+      window.addEventListener('load', function () {
+        ScrollTrigger.refresh();
+        setupGallery();
+      });
+      setTimeout(setupGallery, 800);
+    }
+  }
+
+  /* =====================================================
+     REVIEWS COUNTER
+     ===================================================== */
+  var reviewNum = document.querySelector('.count-5');
+  if (reviewNum && !reduced) {
+    var c = { v: 0 };
+    ScrollTrigger.create({
+      trigger: '.rev-score',
+      start: 'top 85%',
+      once: true,
+      onEnter: function () {
+        gsap.to(c, {
+          v: 5,
+          duration: 1.6,
+          ease: 'power2.out',
+          onUpdate: function () { reviewNum.textContent = Math.round(c.v); }
+        });
+      }
+    });
+  }
+
+  /* =====================================================
+     VIDEO PLAY — concept placeholder
+     ===================================================== */
+  var playBtn = document.querySelector('[data-play]');
+  if (playBtn) {
+    playBtn.addEventListener('click', function () {
+      var badge = document.getElementById('conceptBadge');
+      var modal = document.getElementById('conceptModal');
+      if (modal) {
+        modal.classList.add('open');
+        stopScroll();
+        document.body.classList.add('locked');
+      }
+    });
+  }
+
+  /* =====================================================
+     GALLERY LIGHTBOX
+     ===================================================== */
+  var lb = document.getElementById('lightbox');
+  var lbImg = lb.querySelector('img');
+  var lastFocused = null;
+
+  function openLightbox(item) {
+    var img = item.querySelector('img');
+    if (!img) return;
+    lastFocused = item;
+    lbImg.src = img.currentSrc || img.src;
+    lbImg.alt = img.alt;
+    lb.classList.add('open');
+    stopScroll();
+    document.body.classList.add('locked');
+    lb.querySelector('.lb-close').focus();
+  }
+
+  function closeLightbox() {
+    lb.classList.remove('open');
+    document.body.classList.remove('locked');
+    startScroll();
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('[data-lb]').forEach(function (item) {
+    item.addEventListener('click', function () { openLightbox(item); });
+  });
+
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb || e.target.classList.contains('lb-close')) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (lb.classList.contains('open')) closeLightbox();
+    if (menu.classList.contains('open')) setMenu(false);
+    if (conceptModal.classList.contains('open')) closeConcept();
+  });
+
+  /* =====================================================
+     CONCEPT BADGE + MODAL
+     ===================================================== */
+  var conceptBadge = document.getElementById('conceptBadge');
+  var conceptModal = document.getElementById('conceptModal');
+  var conceptClose = document.getElementById('conceptClose');
+
+  function openConcept() {
+    conceptModal.classList.add('open');
+    stopScroll();
+    document.body.classList.add('locked');
+  }
+  function closeConcept() {
+    conceptModal.classList.remove('open');
+    document.body.classList.remove('locked');
+    startScroll();
+  }
+
+  conceptBadge.addEventListener('click', openConcept);
+  conceptClose.addEventListener('click', closeConcept);
+  conceptModal.addEventListener('click', function (e) {
+    if (e.target === conceptModal) closeConcept();
+  });
+
+  // Show badge after preloader + a beat
+  setTimeout(function () {
+    conceptBadge.classList.add('show');
+  }, 4200);
+
+  /* =====================================================
+     OPEN / CLOSED STATUS — Addis Ababa (UTC+3)
+     ===================================================== */
+  var statusDot = document.getElementById('statusDot');
+  var statusText = document.getElementById('statusText');
+
+  function updateStatus() {
+    if (!statusDot || !statusText) return;
+    var now = new Date();
+    var eat = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 3 * 3600000);
+    var day = eat.getDay();
+    var hours = eat.getHours() + eat.getMinutes() / 60;
+    var OPEN_FROM = 8.5, OPEN_TO = 19;
+    var isOpen = day !== 0 && hours >= OPEN_FROM && hours < OPEN_TO;
+    var label;
+    if (isOpen) label = 'Open now · Closes 7 PM';
+    else if (day === 0) label = 'Closed Sundays · Opens Mon 8:30 AM';
+    else if (hours < OPEN_FROM) label = 'Opens today at 8:30 AM';
+    else label = 'Closed · Opens tomorrow at 8:30 AM';
+    statusDot.classList.toggle('closed', !isOpen);
+    statusText.textContent = label;
+  }
+  updateStatus();
+  window.setInterval(updateStatus, 60000);
+
+  /* =====================================================
+     FOOTER YEAR
+     ===================================================== */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* =====================================================
+     RESIZE
+     ===================================================== */
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { ScrollTrigger.refresh(); }, 250);
+  });
+
+  window.addEventListener('load', function () {
+    setTimeout(function () { ScrollTrigger.refresh(); }, 500);
+  });
+})();
+</script>
+</body>
+</html>
